@@ -8,7 +8,10 @@ export default function Home() {
       <main>
         <Header/>
         <h1>Hello</h1>
+        <div className="flex justify-center">
         <AddTask/>
+
+        </div>
 
       </main>
     </>
