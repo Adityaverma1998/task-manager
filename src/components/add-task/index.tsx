@@ -1,9 +1,12 @@
 "use client";
 
-import { ITaskStatus } from "@/interfaces/task-status";
+import { ITasks, ITaskStatus } from "@/interfaces/task-status";
+import { addTask,deleteTask,updateTask } from "@/redux/reducers/task-reducer";
+import { RootState } from "@/redux/store";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 
 const validate = Yup.object().shape({
@@ -28,6 +31,23 @@ const AddTask = () => {
   const taskRef = React.useRef<HTMLInputElement>(null);
   const statusRef = React.useRef<HTMLSelectElement>(null);
   
+  const tasks = useSelector((state: RootState) => state.tasks);
+  const dispatch = useDispatch();
+
+  // Function to add a new task
+  const handleAddTask = (task:any) => {
+    const newTask:ITasks = { id: Date.now().toString(), task: task.task, status:task.status };
+    dispatch(addTask(newTask));
+  };
+
+  // const handleToggleTask = (task:ITasks) => {
+  //   dispatch(updateTask({ ...task, completed: !task.completed }));
+  // };
+
+  const handleDeleteTask = (taskId:string) => {
+    dispatch(deleteTask(taskId));
+  };
+
   const formik = useFormik({
     initialValues: {
       task: '',
@@ -35,7 +55,7 @@ const AddTask = () => {
     },
     validationSchema: validate,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      handleAddTask(values);
     },
   });
   const handleKeyDown = (e: any, nextRef: React.RefObject<any>) => {
@@ -46,7 +66,9 @@ const AddTask = () => {
   };
   useEffect(() => {
     console.log(formik);
-  },[formik])
+  }, [formik])
+  
+  console.log('check task here',tasks)
 
   return (
     <>

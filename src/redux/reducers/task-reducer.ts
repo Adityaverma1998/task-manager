@@ -1,16 +1,9 @@
-// src/reducers/taskReducer.js
+"use client"
+
+import { IInitialState, ITasks } from "@/interfaces/task-status";
 
 // Initial State
 
-interface ITasks{
-  id: string,
-  task: string;
-  action:string
-}
-
-interface IInitialState{
- tasks: [] | ITasks[]
-}
 
 const initialState:IInitialState = {
     tasks: [],
@@ -49,5 +42,7 @@ const initialState:IInitialState = {
   // Action Creators
   export const addTask = (task:ITasks) => ({ type: ADD_TASK, payload: task });
   export const updateTask = (task:ITasks) => ({ type: UPDATE_TASK, payload: task });
-  export const deleteTask = (id: string) => ({ type: DELETE_TASK, payload: { id } });
+export const deleteTask = (id: string) => ({ type: DELETE_TASK, payload: { id } });
+
+  
   
