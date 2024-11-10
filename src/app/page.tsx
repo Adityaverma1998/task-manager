@@ -1,3 +1,4 @@
+"use client"
 import AddTask from "@/components/add-task";
 import Header from "@/components/common/header";
 import Image from "next/image";

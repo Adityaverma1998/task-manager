@@ -2,6 +2,7 @@
 
 import { ITaskStatus } from "@/interfaces/task-status";
 import { useFormik } from "formik";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import * as Yup from "yup";
 
@@ -12,6 +13,10 @@ const validate = Yup.object().shape({
   status: Yup.string().oneOf(["todo", "inprogress", "complete"], "Invalid status"),
 });
 
+
+
+
+
 const taskStatus: (keyof ITaskStatus)[] = [
   'todo',
   'inprogress',
@@ -19,6 +24,10 @@ const taskStatus: (keyof ITaskStatus)[] = [
 ];
 
 const AddTask = () => {
+
+  const taskRef = React.useRef<HTMLInputElement>(null);
+  const statusRef = React.useRef<HTMLSelectElement>(null);
+  
   const formik = useFormik({
     initialValues: {
       task: '',
@@ -29,7 +38,12 @@ const AddTask = () => {
       alert(JSON.stringify(values, null, 2));
     },
   });
-  
+  const handleKeyDown = (e: any, nextRef: React.RefObject<any>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); 
+      nextRef.current?.focus();  
+    }
+  };
   useEffect(() => {
     console.log(formik);
   },[formik])
@@ -50,6 +64,9 @@ const AddTask = () => {
               value={formik.values.task}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              ref={taskRef}
+              onKeyDown={(e) => handleKeyDown(e, statusRef)}
+
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Enter task name"
             />
@@ -68,6 +85,10 @@ const AddTask = () => {
               value={formik.values.status}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              ref={statusRef}
+                        //  onKeyDown={(e) => handleKeyDown(e, passwordRef)}
+            
+
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               {taskStatus.map((status, index) => (
